@@ -257,7 +257,7 @@ const deleteString = (req, res) => {
   try {
     const { value } = req.params || {};
     const hash = Object.keys(stringsDB).find((key) => stringsDB[key].value === value);
-    if (!hash) return res.status(404).json({ error: "String not found" });
+    if (!hash) return res.status(404).json({ error: "String does not exist in the system" });
   
     delete stringsDB[hash];
 
