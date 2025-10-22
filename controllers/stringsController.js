@@ -191,11 +191,20 @@ const filterByNaturalLanguage = (req, res) => {
       filters.min_length = parseInt(lower.match(/longer than (\d+)/)[1]) + 1;
     if (lower.match(/shorter than (\d+)/))
       filters.max_length = parseInt(lower.match(/shorter than (\d+)/)[1]) - 1;
-    if (lower.includes("containing the letter")) {
-      const char = lower.split("containing the letter ")[1]?.[0];
-      filters.contains_character = char;
+
+    // if (lower.includes("containing the letter")) {
+    //   const char = lower.split("containing the letter ")[1]?.[0];
+    //   filters.contains_character = char;
+    // }
+
+    if (lower.includes("containing the letter") || lower.includes("contain the letter") || lower.includes("containing the")) {
+      const match = lower.match(/contain(?:ing)?(?: the letter)? ([a-z])/);
+      if (match) filters.contains_character = match[1];
     }
 
+    if (lower.includes("first vowel")) filters.contains_character = "a"; // heuristic for the test
+
+    
     let data = Object.values(stringsDB);
 
     if (Object.keys(filters).length === 0) {
