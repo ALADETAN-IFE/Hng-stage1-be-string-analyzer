@@ -86,9 +86,9 @@ const getAllStrings = (req, res) => {
     };
     const hasAnyParam = Object.values(provided).some((v) => v !== undefined);
 
-    const doesNotMatchAnyParam = Object.keys(provided).every(
-      (key) => provided[key] === undefined
-    );
+    // const doesNotMatchAnyParam = Object.keys(provided).every(
+    //   (key) => provided[key] === undefined
+    // );
 
     const queryParams = [
       "is_palindrome",
@@ -97,6 +97,7 @@ const getAllStrings = (req, res) => {
       "word_count",
       "contains_character",
     ];
+
     const invalidParams = Object.keys(req.query).filter(
       (key) => !queryParams.includes(key)
     );
@@ -118,7 +119,7 @@ const getAllStrings = (req, res) => {
         return res.status(400).json({
           error: "Invalid value for is_palindrome; expected 'true' or 'false'",
         });
-      }
+    }
 
       const isQueryNumber = (v) => /^\d+$/.test(String(v));
       if (min_length !== undefined && !isQueryNumber(min_length)) {
@@ -214,16 +215,14 @@ const filterByNaturalLanguage = (req, res) => {
 
     let data = Object.values(stringsDB);
 
-    if (Object.keys(filters).length === 0) {
-      return res.status(400).json({ error: "Unable to parse natural language query" });
-    }
 
-    // Validate for conflicting filters: min_length > max_length
-    if (
-      filters.min_length &&
-      filters.max_length &&
-      filters.min_length > filters.max_length
-    ) {
+    // If no filters parsed, return 400
+    if (Object.keys(filters).length === 0) return res.status(400).json({ error: "Unable to parse natural language query" });
+
+    // Normalize min/max to integers and check conflicts
+    if (filters.min_length) filters.min_length = Number(filters.min_length);
+    if (filters.max_length) filters.max_length = Number(filters.max_length);
+    if (filters.min_length && filters.max_length && filters.min_length > filters.max_length) {
       return res.status(422).json({ error: "Query parsed but resulted in conflicting filters" });
     }
 
@@ -232,9 +231,9 @@ const filterByNaturalLanguage = (req, res) => {
     if (filters.word_count)
       data = data.filter((s) => s.properties.word_count === filters.word_count);
     if (filters.min_length)
-      data = data.filter((s) => s.properties.length > filters.min_length - 1);
+      data = data.filter((s) => s.properties.length > (filters.min_length - 1));
     if (filters.max_length)
-      data = data.filter((s) => s.properties.length < filters.max_length + 1);
+      data = data.filter((s) => s.properties.length < (filters.max_length + 1));
     if (filters.contains_character)
       data = data.filter((s) => s.value.toLowerCase().includes(filters.contains_character));
 
@@ -247,7 +246,7 @@ const filterByNaturalLanguage = (req, res) => {
       },
     };
 
-    res.status(200).json(response);
+    return res.status(200).json(response);
   } catch (err) {
     console.error(err.message);
     return res.status(500).json({ error: "Internal Server Error" });
@@ -257,14 +256,12 @@ const filterByNaturalLanguage = (req, res) => {
 const deleteString = (req, res) => {
   try {
     const { value } = req.params || {};
-    const hash = Object.keys(stringsDB).find(
-      (key) => stringsDB[key].value === value
-    );
+    const hash = Object.keys(stringsDB).find((key) => stringsDB[key].value === value);
     if (!hash) return res.status(404).json({ error: "String not found" });
   
     delete stringsDB[hash];
-    res.status(204).end();
-    
+
+    return res.status(204).send();
   } catch (err) {
     console.error(err.message);
     return res.status(500).json({ error: "Internal Server Error" }); 
