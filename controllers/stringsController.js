@@ -239,14 +239,20 @@ const filterByNaturalLanguage = (req, res) => {
 };
 
 const deleteString = (req, res) => {
-  const { value } = req.params || {};
-  const hash = Object.keys(stringsDB).find(
-    (key) => stringsDB[key].value === value
-  );
-  if (!hash) return res.status(404).json({ error: "String not found" });
-
-  delete stringsDB[hash];
-  res.status(204).send();
+  try {
+    const { value } = req.params || {};
+    const hash = Object.keys(stringsDB).find(
+      (key) => stringsDB[key].value === value
+    );
+    if (!hash) return res.status(404).json({ error: "String not found" });
+  
+    delete stringsDB[hash];
+    res.status(204).send();
+    
+  } catch (err) {
+    console.error(err.message);
+    return res.status(500).json({ error: "Internal Server Error" }); 
+  }
 };
 
 module.exports = {

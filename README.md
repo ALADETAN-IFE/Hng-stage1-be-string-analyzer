@@ -7,7 +7,7 @@ Built using **Node.js**, **Express.js**, and **Crypto**.
 ---
 
 ## 🚀 Live API
-[Live API Link on Railway](https://.up.railway.app/)
+[Live API Link on Railway](https://string-analyzer-hng-1.up.railway.app)
 
 ---
 
