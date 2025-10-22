@@ -168,7 +168,14 @@ const getAllStrings = (req, res) => {
         s.value.toLowerCase().includes(contains_character.toLowerCase())
       );
 
-    const response = { data, count: data.length, filters_applied: req.query };
+    const appliedFilters = {};
+    if (is_palindrome !== undefined) appliedFilters.is_palindrome = is_palindrome === "true";
+    if (min_length !== undefined) appliedFilters.min_length = parseInt(min_length);
+    if (max_length !== undefined) appliedFilters.max_length = parseInt(max_length);
+    if (word_count !== undefined) appliedFilters.word_count = parseInt(word_count);
+    if (contains_character !== undefined) appliedFilters.contains_character = contains_character;
+
+    const response = { data, count: data.length, filters_applied: appliedFilters };
 
     return res.status(200).json(response);
   } catch (err) {
@@ -204,7 +211,7 @@ const filterByNaturalLanguage = (req, res) => {
 
     if (lower.includes("first vowel")) filters.contains_character = "a"; // heuristic for the test
 
-    
+
     let data = Object.values(stringsDB);
 
     if (Object.keys(filters).length === 0) {
