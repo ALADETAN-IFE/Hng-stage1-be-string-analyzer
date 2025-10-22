@@ -247,7 +247,7 @@ const deleteString = (req, res) => {
     if (!hash) return res.status(404).json({ error: "String not found" });
   
     delete stringsDB[hash];
-    res.status(204).send();
+    res.status(204).end();
     
   } catch (err) {
     console.error(err.message);
