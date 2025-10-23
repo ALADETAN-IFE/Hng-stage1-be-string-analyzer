@@ -375,7 +375,7 @@ const filterByNaturalLanguage = (req, res) => {
     const conflicts = [];
 
     // Detect palindrome filters
-    if (lower.includes("palindrome")) {
+    if (lower.includes("palindrome") || lower.includes("palindromic")) {
       if (lower.includes("not palindrome") || lower.includes("non-palindrome")) {
         parsedFilters.is_palindrome = false;
       } else {
@@ -416,7 +416,7 @@ const filterByNaturalLanguage = (req, res) => {
     }
 
     // Check for conflicts (example: palindrome + not palindrome)
-    if (lower.includes("palindrome") && (lower.includes("not palindrome") ||
+    if ((lower.includes("palindrome") || lower.includes("palindromic")) && (lower.includes("not palindrome") ||
       lower.includes("non-palindrome"))) {
       conflicts.push("is_palindrome");
     }

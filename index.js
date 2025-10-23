@@ -25,7 +25,7 @@ app.use(morgan("dev"));
 
 const limiter = rateLimit({
   windowMs: 60 * 1000,
-  max: 10,
+  max: 1000,
   message: "Too many requests, please try again later.",
 });
 
@@ -55,6 +55,10 @@ app.use((req, res) => {
 
 
 // Server Startup
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
-});
+if (require.main === module) {
+  app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
+  });
+}
+
+module.exports = app;
