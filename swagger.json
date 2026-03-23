@@ -5,5 +5,92 @@
     "version": "1.0.0",
     "description": "API documentation for the HNG Stage 1 String Analyzer project."
   },
-  "paths": {}
+  "paths": {
+    "/strings": {
+      "post": {
+        "summary": "Analyze a string",
+        "description": "Analyze a string and store its properties.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "value": { "type": "string" }
+                },
+                "required": ["value"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": { "description": "String analyzed and stored" },
+          "400": { "description": "Invalid request body or missing 'value' field" },
+          "409": { "description": "String already exists in the system" },
+          "422": { "description": "Invalid data type for 'value' (must be a string)" }
+        }
+      },
+      "get": {
+        "summary": "Get all analyzed strings",
+        "description": "Retrieve all analyzed strings (optionally filtered).",
+        "responses": {
+          "200": { "description": "List of analyzed strings" }
+        }
+      }
+    },
+    "/strings/filter-by-natural-language": {
+      "get": {
+        "summary": "Filter strings by natural language query",
+        "description": "Filter analyzed strings using a natural language query.",
+        "parameters": [
+          {
+            "name": "query",
+            "in": "query",
+            "description": "Natural language query string",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": { "description": "Filtered strings" },
+          "400": { "description": "Missing or invalid query parameter" }
+        }
+      }
+    },
+    "/strings/{value}": {
+      "get": {
+        "summary": "Get analyzed string by value",
+        "description": "Retrieve a single analyzed string by its value.",
+        "parameters": [
+          {
+            "name": "value",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": { "description": "String found" },
+          "404": { "description": "String does not exist in the system" }
+        }
+      },
+      "delete": {
+        "summary": "Delete analyzed string by value",
+        "description": "Delete a single analyzed string by its value.",
+        "parameters": [
+          {
+            "name": "value",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": { "description": "String deleted" },
+          "404": { "description": "String does not exist in the system" }
+        }
+      }
+    }
+  }
 }
