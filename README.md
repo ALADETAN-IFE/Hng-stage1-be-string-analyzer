@@ -9,6 +9,10 @@ Built using **Node.js**, **Express.js**, and **Crypto**.
 ## 🚀 Live API
 [Live API Link on Railway](https://string-analyzer-hng-1.up.railway.app)
 
+## Live API DOCUMENTATION
+[Live API Documentation on SwaggerDocs](https://string-analyzer-hng-1.up.railway.app/api-doc)
+
+
 ---
 
 ## 🧩 Features
