@@ -3,13 +3,13 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "start": "node api.js && nodemon index.js",
+    "start": "nodemon index.js",
     "test": "jest --runInBand"
   },
   "keywords": [],
   "author": "IfeCodes",
   "license": "ISC",
-  "description": "HNG Internship Stage 1 \u2014 Backend task: a RESTful API service that analyzes strings, computes their properties (length, palindrome, word count, etc.), and supports filtering and natural language queries using Node.js and Express.",
+  "description": "HNG Internship Stage 1 — Backend task: a RESTful API service that analyzes strings, computes their properties (length, palindrome, word count, etc.), and supports filtering and natural language queries using Node.js and Express.",
   "dependencies": {
     "cors": "^2.8.5",
     "crypto": "^1.0.1",
